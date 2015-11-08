@@ -59,7 +59,8 @@ var server=new http.Server(function(req,res){
 		var index;
 
 for	(index = 0; index < rssArr.length; index++) {
-   res.write(rssArr[index].author);
+   res.write(rssArr[index].title+" "+ rssArr[index].author+" "+rssArr[index].link+
+   "<div><p>"+rssArr[index].description+"</p>/div>");
 }
 res.end();
 	}
