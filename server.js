@@ -2,6 +2,7 @@ var http=require('http');
 var url=require('url');
 var util=require('util');
 var rssresult= require('./RSS');
+var utf8 = require('utf8');
 var rssArr=[];
 
 var FeedParser=require('feedparser')
@@ -59,8 +60,9 @@ var server=new http.Server(function(req,res){
 		var index;
 
 for	(index = 0; index < rssArr.length; index++) {
-   res.write(rssArr[index].title+" "+ rssArr[index].author+" "+rssArr[index].link+
-   "<div><p>"+rssArr[index].description+"</p>/div>");
+   res.write(utf8.encode(rssArr[index].title)+" "
+   +utf8.encode(rssArr[index].author)+" "+utf8.encode(rssArr[index].link+
+   "<div><p>"+rssArr[index].description+"</p>/div>"));
 }
 res.end();
 	}
