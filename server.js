@@ -1,7 +1,8 @@
 var http=require('http');
 var url=require('url');
 var util=require('util');
-var rssresult='empty rss';
+var rssresult= require('./RSS');
+var rssArr=[];
 
 var FeedParser=require('feedparser')
 	,request=require('request');
@@ -30,12 +31,15 @@ feedparser.on('readable', function() {
   var stream = this
     , meta = this.meta // **NOTE** the "meta" is always available in the context of the feedparser instance
     , item;
-
+var i=0;
   while (item = stream.read()) {
-    rssresult=rssresult+item;
-	console.log(item);
+	rssArr[i]=item;
+	i=i+1;
   }
 });
+
+
+
 
 var server=new http.Server(function(req,res){
 	console.log(req.method,req.url)
@@ -51,8 +55,13 @@ var server=new http.Server(function(req,res){
 		options.feedurl=urlParsed.query.message;
 		req=request(options.feedurl);		
 		req.emit('response',options.feedurl);
-		res.end(util.format("%s",rssresult.title));
-		
+		//res.end(util.format("%s",rssresult.title));
+		var index;
+
+for	(index = 0; index < rssArr.length; index++) {
+   res.write(rssArr[index].author);
+}
+res.end();
 	}
 	else {
 		res.statusCode=404;
